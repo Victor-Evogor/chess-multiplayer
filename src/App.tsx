@@ -4,6 +4,7 @@ import { Info } from "./components/Info";
 import { Menu } from "./components/Menu";
 import { Modal } from "./components/Modal";
 import { StoreProvider } from "./Store";
+import {PageNotFound} from "./components/PageNotFound"
 
 export const App = () => {
   return (
@@ -15,6 +16,7 @@ export const App = () => {
             <Route path="/" element={<Menu />} />
             <Route path="/info" element={<Info />} />
             <Route path="/game" element={<Game />} />
+            <Route path="*" element={<PageNotFound/>} />
           </Routes>
         </BrowserRouter>
       </StoreProvider>

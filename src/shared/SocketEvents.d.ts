@@ -8,4 +8,5 @@ export type SocketEmitEvents =
   | "invalid move made"
   | "challenge"
   | "challenge made"
-  | "game over";
+  | "game over"
+  | "no user found";

@@ -8,6 +8,7 @@ import { useSocket } from "../hooks/useSocket";
 import { cancelSearch } from "../utils/cancelSearch";
 import { challengeOpponentWithId } from "../utils/challengeOpponentWithId";
 import { SocketEmitEvents } from "../shared/SocketEvents";
+import { FaWindowClose } from "react-icons/fa";
 
 export const Menu = () => {
   const { setIsModalOpen, setModalItems } = useModal();
@@ -16,7 +17,7 @@ export const Menu = () => {
 
   if (!socket) return <div>Loading...</div>;
 
-  updateUserData({idle: true}, socket);
+  updateUserData({ idle: true }, socket);
 
   const onCancel = () => {
     if (!socket) return;
@@ -26,21 +27,36 @@ export const Menu = () => {
 
   socket.on<SocketEmitEvents>(
     "challenge made",
-    (game: Game, callback: (err: string | null , answer: boolean, game?:Game) => void) => {
+    (
+      game: Game,
+      callback: (err: string | null, answer: boolean, game?: Game) => void
+    ) => {
       setIsModalOpen(true);
       setModalItems(
         <section>
-          <p className="px-2 py-2">You have been challenged by <strong>{game.p1}</strong></p>
+          <p className="px-2 py-2">
+            You have been challenged by <strong>{game.p1}</strong>
+          </p>
           <div className="flex items-center gap-2">
-            <button onClick={()=>{
-              callback(null, true, game)
-              setIsModalOpen(false);
-              navigate(`/game?p1=${game.p1}&p2=${game.p2}`);
-            }} className="p-2 bg-green-300 hover:brightness-75 active:brightness-50 rounded-md`">Accept</button>
-            <button onClick={()=> {
-              callback(null, false)
-              setIsModalOpen(false)
-            }} className="p-2 bg-red-300 hover:brightness-75 active:brightness-50 rounded-md">Reject</button>
+            <button
+              onClick={() => {
+                callback(null, true, game);
+                setIsModalOpen(false);
+                navigate(`/game?p1=${game.p1}&p2=${game.p2}`);
+              }}
+              className="p-2 bg-green-300 hover:brightness-75 active:brightness-50 rounded-md`"
+            >
+              Accept
+            </button>
+            <button
+              onClick={() => {
+                callback(null, false);
+                setIsModalOpen(false);
+              }}
+              className="p-2 bg-red-300 hover:brightness-75 active:brightness-50 rounded-md"
+            >
+              Reject
+            </button>
           </div>
         </section>
       );
@@ -83,21 +99,42 @@ export const Menu = () => {
                 onSubmit={(inputID) => {
                   if (!inputID || inputID === socket.id) return;
                   challengeOpponentWithId(socket, inputID)
-                    .then(({game, response}) => {
-                      if(response)
-                      {
-                        setIsModalOpen(false)
+                    .then(({ game, response }) => {
+                      if (response) {
+                        setIsModalOpen(false);
                         navigate(`/game?p1=${game.p1}&p2=${game.p2}`);
-                      }
-                      else{
+                      } else {
                         setIsModalOpen(true);
-                        setModalItems(<p>User rejected your challenge</p>)
+                        setModalItems(
+                          <p className="flex justify-between items-center">
+                            <span>This user rejected your challenge</span>
+                            <span
+                              onClick={() => {
+                                setIsModalOpen(false);
+                              }}
+                              className="cursor-pointer"
+                            >
+                              <FaWindowClose />
+                            </span>
+                          </p>
+                        );
                       }
                     })
                     .catch((error) => {
                       alert(error);
-                      console.log(error)
+                      console.log(error);
                     });
+                    setModalItems(<p className="flex justify-between items-center">
+                        <span>Challenge sent!!</span>
+                        <span
+                          onClick={() => {
+                            setIsModalOpen(false);
+                          }}
+                          className="cursor-pointer"
+                        >
+                          <FaWindowClose />
+                        </span>
+                      </p>)
                 }}
               />
             );
@@ -105,7 +142,12 @@ export const Menu = () => {
         >
           Play Friendly
         </button>
-        <button className="bg-zinc-200 px-4 py-2 hover:brightness-75 active:brightness-50">
+        <button
+          className="bg-zinc-200 px-4 py-2 hover:brightness-75 active:brightness-50"
+          onClick={() => {
+            navigate(`/game?p1=${socket.id}&p2=ai`);
+          }}
+        >
           Play Computer
         </button>
         <button

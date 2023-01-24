@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:css": "tailwindcss -i src/input.tail.css -o src/styles.css -w",
+    "dev:css": "tailwindcss -i src/input.tail.css -o src/styles.css -w -m",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
