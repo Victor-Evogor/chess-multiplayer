@@ -10,6 +10,7 @@ import { GameOver } from "../shared/GameOver";
 import { useModal } from "../hooks/useModal";
 import { GameOverComp } from "./GameOverComp";
 import { FaWindowClose } from "react-icons/fa";
+import { playSound } from "../utils/playSound";
 
 export const Game = () => {
   const { socket } = useSocket();
@@ -42,6 +43,7 @@ export const Game = () => {
 
   socket.on<SocketEmitEvents>("move made", (boardFen) => {
     setPosition(boardFen);
+    playSound("move");
   });
 
   socket.on<SocketEmitEvents>("game over", (gameOver: GameOver) => {
