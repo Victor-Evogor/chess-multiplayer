@@ -5,6 +5,7 @@ import step1 from "../imgs/step_1.png";
 import step2 from "../imgs/step_2.png";
 import step3 from "../imgs/step_3.png";
 import step4 from "../imgs/step_4.png";
+import invalidMove from "../imgs/invalid_move.gif"
 
 export const Info = () => {
   const navigate = useNavigate();
@@ -69,14 +70,15 @@ export const Info = () => {
             Drag a piece to the target square to make a move, if its a valid
             move, it will drop else it will not
           </p>
+          <p><img src={invalidMove}/></p>
         </div>
 
         <div>
           <h2 className="text-2xl font-extrabold my-1">Chess Rules</h2>
           <p>
-            Learn more about chess {/* TODO:add external chess rules guide  */}
+            Learn more about chess
             <a
-              href="#"
+              href="https://en.wikipedia.org/wiki/Rules_of_chess"
               target="_blank"
               rel="noreferrer"
               className="text-sky-500"
